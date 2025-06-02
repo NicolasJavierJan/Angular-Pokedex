@@ -1,0 +1,10 @@
+<div *ngIf="pokemonDetail">
+  <h2>{{ pokemonDetail.name }}</h2>
+  <img 
+    [src]="pokemonDetail.sprites.other['official-artwork'].front_default" 
+    [alt]="pokemonDetail.name" />
+</div>
+
+<div *ngIf="!pokemonDetail && pokemonName">
+  Loading...
+</div>

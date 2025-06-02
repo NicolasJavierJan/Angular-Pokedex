@@ -1,0 +1,9 @@
+<div class="list-box">
+  <div class="list-scroll" #scrollContainer>
+    <div *ngFor="let pokemon of pokemon">
+      {{ pokemon.name }}
+    </div>
+    <div *ngIf="loading" class="loading">Loading more...</div>
+    <div *ngIf="allLoaded" class="end"></div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+.list-box {
+  height: calc(100% - 2rem);
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  margin: 1rem;
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+}
+
+.list-scroll {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+}
