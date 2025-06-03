@@ -12,5 +12,10 @@ import { PokemonDetailComponent } from "./components/pokemon-detail/pokemon-deta
   styleUrl: './app.css'
 })
 export class App {
-  protected title = "Pokedex"
+  selectedPokemonName? : string;
+
+  onPokemonSelected(name: string){
+    console.log("Pokemon selected:", name);
+    this.selectedPokemonName = name;
+  }
 }

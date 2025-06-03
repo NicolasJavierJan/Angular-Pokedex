@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import { PokemonService } from '../../services/pokemon';
 import { CommonModule } from '@angular/common';
 
@@ -17,6 +17,8 @@ export class PokemonList implements AfterViewInit{
     allLoaded = false;
 
     @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+
+    @Output() selectedPokemon = new EventEmitter<string>();
   
     constructor(private pokemonService: PokemonService) {
       this.loadPokemon();
@@ -50,6 +52,10 @@ export class PokemonList implements AfterViewInit{
 
         this.loading = false;
       });
+    }
+
+    onPokemonClick(name: string){
+      this.selectedPokemon.emit(name);
     }
 
 }
