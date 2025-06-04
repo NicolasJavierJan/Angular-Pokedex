@@ -1,10 +1,15 @@
-<div *ngIf="pokemonDetail">
+<div *ngIf="pokemonDetail; else loadingOrError">
   <h2>{{ pokemonDetail.name }}</h2>
   <img 
     [src]="pokemonDetail.sprites.front_default" 
     [alt]="pokemonDetail.name" />
+  
+  <app-pokemon-stats-graph
+    [stats]="pokemonDetail.stats"
+    [pokemonName]="pokemonDetail.name">
+  </app-pokemon-stats-graph>
 </div>
 
-<div *ngIf="!pokemonDetail && pokemonName">
-  Loading...
-</div>
+<ng-template #loadingOrError>
+  <p *ngIf="pokemonName && !pokemonDetail">Loading...</p>
+</ng-template>

@@ -1,12 +1,14 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { PokemonService } from '../../services/pokemon';
 import { CommonModule } from '@angular/common';
+import { PokemonStatsGraph } from '../pokemon-stats-graph/pokemon-stats-graph';
 
 @Component({
   selector: 'app-pokemon-detail',
-  imports: [CommonModule],
+  imports: [CommonModule, PokemonStatsGraph],
   templateUrl: './pokemon-detail.html',
-  styleUrls: ['./pokemon-detail.css']
+  styleUrls: ['./pokemon-detail.css'],
+  standalone: true,
 })
 
 export class PokemonDetailComponent implements OnChanges{
@@ -23,8 +25,8 @@ export class PokemonDetailComponent implements OnChanges{
   }
 
   loadPokemonDetail(name: string) {
+    this.pokemonDetail = null;
     this.pokemonService.getPokemonDetails(name).subscribe(detail => {
-      console.log(detail);
       this.pokemonDetail = detail;
     });
   }
