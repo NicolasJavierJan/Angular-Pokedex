@@ -10,6 +10,10 @@
   </app-pokemon-stats-graph>
 </div>
 
+<div class="types-container" *ngIf="pokemonDetail?.types">
+  <app-pokemon-types [types]="pokemonDetail.types"></app-pokemon-types>
+</div>
+
 <ng-template #loadingOrError>
   <p *ngIf="pokemonName && !pokemonDetail">Loading...</p>
 </ng-template>
