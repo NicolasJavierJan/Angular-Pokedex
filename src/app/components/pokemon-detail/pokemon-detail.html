@@ -14,6 +14,12 @@
   <app-pokemon-types [types]="pokemonDetail.types"></app-pokemon-types>
 </div>
 
-<ng-template #loadingOrError>
-  <p *ngIf="pokemonName && !pokemonDetail">Loading...</p>
-</ng-template>
+<div *ngIf="pokemonDetail?.abilities">
+  <app-pokemon-abilities [abilities]="pokemonDetail.abilities"></app-pokemon-abilities>
+</div>
+
+<div>
+  <ng-template #loadingOrError>
+    <p *ngIf="pokemonName && !pokemonDetail">Loading...</p>
+  </ng-template>
+</div>
