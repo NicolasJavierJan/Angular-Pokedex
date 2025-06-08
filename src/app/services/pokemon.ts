@@ -16,6 +16,10 @@ export class PokemonService {
   }
 
   getPokemonDetails(name: string): Observable<any> {
-  return this.http.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
-}
+    return this.http.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+  }
+
+  getPokemonSpecies(name: string) {
+    return this.http.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`);
+  }
 }

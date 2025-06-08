@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { PokemonStatsGraph } from '../pokemon-stats-graph/pokemon-stats-graph';
 import { PokemonTypes } from '../pokemon-types/pokemon-types';
 import { PokemonAbilities } from '../pokemon-abilities/pokemon-abilities';
+import { PokemonSpecies } from '../pokemon-species/pokemon-species';
 
 @Component({
   selector: 'app-pokemon-detail',
-  imports: [CommonModule, PokemonStatsGraph, PokemonTypes, PokemonAbilities],
+  imports: [CommonModule, PokemonStatsGraph, PokemonTypes, PokemonAbilities, PokemonSpecies],
   templateUrl: './pokemon-detail.html',
   styleUrls: ['./pokemon-detail.css'],
   standalone: true,
