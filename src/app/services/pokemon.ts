@@ -22,4 +22,8 @@ export class PokemonService {
   getPokemonSpecies(name: string) {
     return this.http.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`);
   }
+
+  getEvolutionChainByUrl(url: string) {
+    return this.http.get(url);
+  }
 }

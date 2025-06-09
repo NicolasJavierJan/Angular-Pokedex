@@ -1,0 +1,9 @@
+<h3>Evolution Chain</h3>
+<div class="evolution-chain">
+  <div *ngFor="let pokemon of evolutionChainList" class="evolution-stage">
+    <img 
+      [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getIdFromUrl(pokemon.url) + '.png'"
+      [alt]="pokemon.name" />
+    <p>{{ pokemon.name | titlecase }}</p>
+  </div>
+</div>

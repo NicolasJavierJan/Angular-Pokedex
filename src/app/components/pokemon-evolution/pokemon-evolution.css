@@ -1,0 +1,10 @@
+.evolution-chain {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.evolution-stage {
+  text-align: center;
+}

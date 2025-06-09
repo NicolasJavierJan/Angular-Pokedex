@@ -5,10 +5,11 @@ import { PokemonStatsGraph } from '../pokemon-stats-graph/pokemon-stats-graph';
 import { PokemonTypes } from '../pokemon-types/pokemon-types';
 import { PokemonAbilities } from '../pokemon-abilities/pokemon-abilities';
 import { PokemonSpecies } from '../pokemon-species/pokemon-species';
+import { PokemonEvolution } from '../pokemon-evolution/pokemon-evolution';
 
 @Component({
   selector: 'app-pokemon-detail',
-  imports: [CommonModule, PokemonStatsGraph, PokemonTypes, PokemonAbilities, PokemonSpecies],
+  imports: [CommonModule, PokemonStatsGraph, PokemonTypes, PokemonAbilities, PokemonSpecies, PokemonEvolution],
   templateUrl: './pokemon-detail.html',
   styleUrls: ['./pokemon-detail.css'],
   standalone: true,
@@ -33,4 +34,5 @@ export class PokemonDetailComponent implements OnChanges{
       this.pokemonDetail = detail;
     });
   }
+  
 }
