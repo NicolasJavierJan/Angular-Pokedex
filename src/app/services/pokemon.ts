@@ -1,18 +1,27 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PokemonService {
   private baseUrl = 'https://pokeapi.co/api/v2/pokemon';
+  private cachedPokemonList: any[] | null = null;
 
   constructor(private http: HttpClient) { }
 
-  getPokemonList(limit: number = 100, offset: number = 0): Observable<any> {
-    const url = `${this.baseUrl}?limit=${limit}&offset=${offset}`;
-    return this.http.get<any>(url);
+  getPokemonList(limit: number): Observable<any> {
+    if (this.cachedPokemonList) {
+      return of({ results: this.cachedPokemonList });
+    }
+
+    const url = `${this.baseUrl}?limit=${limit}`;
+    return this.http.get<any>(url).pipe(
+      tap(response => {
+        this,this.cachedPokemonList = response.results;
+      })
+    );
   }
 
   getPokemonDetails(name: string): Observable<any> {

@@ -1,59 +1,61 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, EventEmitter, Output, Input } from '@angular/core';
 import { PokemonService } from '../../services/pokemon';
 import { CommonModule } from '@angular/common';
+import { debounceTime, Subject } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pokemon-list',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './pokemon-list.html',
   styleUrl: './pokemon-list.css'
 })
-export class PokemonList implements AfterViewInit{
-    protected title = 'Pokedex';
-    pokemon : any[] = []
-    limit = 100;
-    offset = 0;
-    loading = false;
-    allLoaded = false;
 
-    @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
+export class PokemonList implements OnInit{
+    protected title = 'Pokedex';
+    pokemon : any[] = [];
+    filteredPokemon : any[] = [];
+    loading = false;
+
+    search : String = '';
+    private searchSubject = new Subject<string>();
 
     @Output() selectedPokemon = new EventEmitter<string>();
   
-    constructor(private pokemonService: PokemonService) {
-      this.loadPokemon();
+    constructor(private pokemonService: PokemonService) { 
+      this.searchSubject.pipe(debounceTime(300)).subscribe(query => {
+      this.applySearch(query);
+      });
     }
 
-    ngAfterViewInit(){
-      this.scrollContainer.nativeElement.addEventListener('scroll', () => {
-        const el = this.scrollContainer.nativeElement;
-        if (el.scrollHeight - el.scrollTop <= el.clientHeight + 10) {
-          this.loadPokemon();
-        }
-      })
+    ngOnInit(): void {
+      this.loadAllPokemon();
     }
   
-    loadPokemon(){
-      if (this.loading || this.allLoaded) return;
-
+    loadAllPokemon(){
       this.loading = true;
 
-      const remaining = 1025 - this.offset;
-      
-      const fetchLimit = remaining < this.limit ? remaining : this.limit;
-
-      this.pokemonService.getPokemonList(fetchLimit, this.offset).subscribe(data => {
-        this.pokemon = [...this.pokemon, ...data.results];
-        this.offset += fetchLimit;
-
-        if (this.offset >= 1025 || !data.next) {
-          this.allLoaded = true;
-        }
-
+      this.pokemonService.getPokemonList(1025).subscribe(data => {
+        this.pokemon = data.results;
+        this.filteredPokemon = [...this.pokemon];
         this.loading = false;
       });
     }
 
+  onSearchChange(value: string) {
+    this.searchSubject.next(value);
+  }
+
+  applySearch(query: string) {
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      this.filteredPokemon = [...this.pokemon];
+    } else {
+      this.filteredPokemon = this.pokemon.filter(p =>
+        p.name.toLowerCase().includes(q)
+      );
+    }
+  }
     onPokemonClick(name: string){
       this.selectedPokemon.emit(name);
     }

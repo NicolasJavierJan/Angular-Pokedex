@@ -1,9 +1,22 @@
 <div class="list-box">
-  <div class="list-scroll" #scrollContainer>
-    <div *ngFor="let pokemon of pokemon" (click)="onPokemonClick(pokemon.name)" class="pokemon-item">
+  <input
+    type="text"
+    placeholder="Search Pokémon..."
+    [(ngModel)]="search"
+    (ngModelChange)="onSearchChange($event)"
+    class="search-input"
+  />
+
+  <div class="list-scroll">
+    <div
+      *ngFor="let pokemon of filteredPokemon"
+      (click)="onPokemonClick(pokemon.name)"
+      class="pokemon-item"
+    >
       {{ pokemon.name }}
     </div>
-    <div *ngIf="loading" class="loading">Loading more...</div>
-    <div *ngIf="allLoaded" class="end"></div>
+
+    <div *ngIf="loading" class="loading">Loading...</div>
+    <div *ngIf="!loading && filteredPokemon.length === 0" class="no-results">No Pokémon found.</div>
   </div>
 </div>
