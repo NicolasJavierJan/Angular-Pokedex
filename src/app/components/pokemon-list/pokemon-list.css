@@ -1,22 +1,54 @@
-:host {
-  width: 25%;
-  height: 100%;
+.search-box {
+  position: relative;
+  display: inline-flex;
+  width: calc(100% - 2rem);
+  align-items: center;
+  margin: 1rem;
+}
+
+.pokeball-icon {
+  position: absolute;
+  left: 10px;
+  pointer-events: none;
+  width: 16px;
+  height: 16px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  padding-left: 32px;
+  font-size: 1rem;
+  border: 2px solid #bbb;
+  border-radius: 8px;
+  outline: none;
   box-sizing: border-box;
 }
 
 .list-box {
-  height: calc(100% - 2rem);
+  margin: 0 1rem 1rem 1rem; 
   background: white;
   border: 2px solid #ccc;
   border-radius: 12px;
-  margin: 1rem;
-  overflow: hidden; 
+  height: calc(100% - 6rem); 
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .list-scroll {
   padding: 1rem;
+  padding-top: 0rem;
   overflow-y: auto;
   flex: 1;
+}
+
+.pokemon-item {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.pokemon-item:hover {
+  background-color: #f5f5f5;
 }

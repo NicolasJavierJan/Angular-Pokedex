@@ -1,12 +1,33 @@
-<div class="list-box">
-  <input
+<div class="search-box">
+    <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    stroke="grey"
+    stroke-width="2"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="pokeball-icon"
+  >
+    <circle cx="12" cy="12" r="10" /> 
+    <line x1="2" y1="12" x2="22" y2="12" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="12" cy="12" r="2" fill="black" />
+  </svg>
+
+  
+  <input 
     type="text"
     placeholder="Search Pokémon..."
     [(ngModel)]="search"
     (ngModelChange)="onSearchChange($event)"
     class="search-input"
   />
+</div>
 
+<div class="list-box">
   <div class="list-scroll">
     <div
       *ngFor="let pokemon of filteredPokemon"
