@@ -32,14 +32,18 @@ export class PokemonList implements OnInit{
       this.loadAllPokemon();
     }
   
-    loadAllPokemon(){
+    async loadAllPokemon() {
       this.loading = true;
 
-      this.pokemonService.getPokemonList(1025).subscribe(data => {
+      try {
+        const data = await this.pokemonService.getPokemonList(1025);
         this.pokemon = data.results;
         this.filteredPokemon = [...this.pokemon];
+      } catch (error) {
+        console.error('Failed to load Pokémon:', error);
+      } finally {
         this.loading = false;
-      });
+      }
     }
 
   onSearchChange(value: string) {
