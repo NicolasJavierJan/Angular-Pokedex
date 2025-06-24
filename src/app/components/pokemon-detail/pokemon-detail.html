@@ -1,8 +1,8 @@
 <div *ngIf="pokemonDetail; else loadingOrError">
-  <h2>{{ pokemonDetail.name }}</h2>
+  <h2>{{ pokemonDetail.species.name }}</h2>
   <img 
     [src]="pokemonDetail.sprites.front_default" 
-    [alt]="pokemonDetail.name" />
+    [alt]="pokemonDetail.species.name " />
   
   <app-pokemon-stats-graph
     [stats]="pokemonDetail.stats"

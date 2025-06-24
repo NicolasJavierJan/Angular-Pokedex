@@ -32,6 +32,8 @@ export class PokemonDetailComponent implements OnChanges{
     this.pokemonDetail = null;
     this.pokemonService.getPokemonDetails(name).subscribe(detail => {
       this.pokemonDetail = detail;
+      this.pokemonDetail.species.name = this.pokemonDetail.species.name.replace(/(^[a-z])|(-[a-z])/g, (match : string) => match.toUpperCase());
+      console.log(this.pokemonDetail);
     });
   }
   

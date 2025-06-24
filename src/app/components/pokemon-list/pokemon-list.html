@@ -34,7 +34,7 @@
       (click)="onPokemonClick(pokemon.name)"
       class="pokemon-item"
     >
-      {{ pokemon.displayName || pokemon.name  }}
+      {{ pokemon.displayName || pokemon.name | titlecase  }}
     </div>
 
     <div *ngIf="loading" class="loading">Loading...</div>
