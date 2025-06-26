@@ -10,20 +10,24 @@ import { PokemonService } from '../../services/pokemon';
 })
 export class PokemonEvolution implements OnChanges {
   @Input() name: string = '';
-  evolutionChainList: { name: string; url: string }[] = [];
+  evolutionChainList: { name: string; url: string; displayName?: string }[] = [];
 
   constructor(private pokemonService: PokemonService) { console.log('asdf');
   }
   
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('aaaa');
-    
     if (changes['name'] && this.name) {
-      this.pokemonService.getPokemonSpecies(this.name).subscribe((species: any) => {
+      const speciesName = this.pokemonService.resolveSpeciesName(this.name);
+      this.pokemonService.getPokemonSpecies(speciesName).subscribe((species: any) => {
         const url = species?.evolution_chain?.url;
         if (url) {
           this.pokemonService.getEvolutionChainByUrl(url).subscribe((chain: any) => {
-            this.evolutionChainList = this.extractEvolutionChain(chain.chain);
+            const rawList = this.extractEvolutionChain(chain.chain);
+            // Add displayName property to each
+            this.evolutionChainList = rawList.map(p => ({
+              ...p,
+              displayName: this.pokemonService.getDisplayName(p.name)
+            }));
           });
         }
       });
@@ -34,7 +38,6 @@ export class PokemonEvolution implements OnChanges {
     const result: { name: string; url: string }[] = [];
 
     const traverse = (node: any) => {
-      console.log('Visiting:', node.species.name);
       result.push(node.species);
       if (node.evolves_to && node.evolves_to.length > 0) {
         for (const evo of node.evolves_to) {
@@ -44,7 +47,6 @@ export class PokemonEvolution implements OnChanges {
     };
 
     traverse(chainNode);
-    console.log('Full evolution list:', result.map(r => r.name));
     return result;
   }
 

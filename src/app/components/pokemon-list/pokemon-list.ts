@@ -37,7 +37,7 @@ export class PokemonList implements OnInit{
 
       try {
         const data = await this.pokemonService.getPokemonList(1025);
-        this.pokemon = data.results;
+        this.pokemon = data;
         this.filteredPokemon = [...this.pokemon];
       } catch (error) {
         console.error('Failed to load Pokémon:', error);
@@ -51,13 +51,26 @@ export class PokemonList implements OnInit{
   }
 
   applySearch(query: string) {
-    const q = query.trim().toLowerCase();
+    const normalize = (input: string) =>
+      input
+        .toLowerCase()
+        .trim()
+        .replace(/[.’']/g, '')       // remove dots/apostrophes
+        .replace(/\s+/g, '-')        // spaces → hyphens
+        .normalize("NFD")            // remove accents
+        .replace(/[\u0300-\u036f]/g, '');
+
+    const q = normalize(query);
+
     if (!q) {
       this.filteredPokemon = [...this.pokemon];
     } else {
-      this.filteredPokemon = this.pokemon.filter(p =>
-        p.name.toLowerCase().includes(q)
-      );
+      this.filteredPokemon = this.pokemon.filter(p => {
+        const normalizedName = normalize(p.name);
+        const normalizedDisplayName = p.displayName ? normalize(p.displayName) : '';
+
+        return normalizedName.includes(q) || normalizedDisplayName.includes(q);
+      });
     }
   }
     onPokemonClick(name: string){

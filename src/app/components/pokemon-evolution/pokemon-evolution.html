@@ -4,6 +4,6 @@
     <img 
       [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getIdFromUrl(pokemon.url) + '.png'"
       [alt]="pokemon.name" />
-    <p>{{ pokemon.name | titlecase }}</p>
+    <p>{{ pokemon.displayName ?? pokemon.name | titlecase }}</p>
   </div>
 </div>

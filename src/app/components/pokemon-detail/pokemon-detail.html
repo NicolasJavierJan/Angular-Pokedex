@@ -1,33 +1,43 @@
 <div *ngIf="pokemonDetail; else loadingOrError">
-  <h2>{{ pokemonDetail.species.name }}</h2>
-  <img 
-    [src]="pokemonDetail.sprites.front_default" 
-    [alt]="pokemonDetail.species.name " />
+
+  <!-- Pokemon Name -->
+  <h2 class="title"> {{ pokemonDetail.displayName }} </h2>
+
+  <div class="top-row">
+    <div class="sprite-section">
+      <div class="sprite-wrapper">
+        <svg class="pokeball-bg" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke="lightgray" stroke-width="2" fill="none" />
+          <line x1="2" y1="12" x2="22" y2="12" stroke="lightgray" stroke-width="2" />
+          <circle cx="12" cy="12" r="4" stroke="lightgray" stroke-width="2" fill="none" />
+          <circle cx="12" cy="12" r="2" fill="lightgray" />
+        </svg>
+           <img 
+            [src]="pokemonDetail.sprites.front_default" 
+            [alt]="pokemonDetail.species.name " 
+            class="sprite-img"/>
+      </div>
+        <div class="types-container" *ngIf="pokemonDetail?.types">
+        <app-pokemon-types [types]="pokemonDetail.types"></app-pokemon-types>
+      </div>
+    </div>
+    <div class="species-info">
+      <app-pokemon-species 
+      *ngIf="pokemonDetail?.name"
+      [name]="pokemonDetail.name">
+      </app-pokemon-species>
+    </div>
+  </div>
+
   
-  <app-pokemon-stats-graph
-    [stats]="pokemonDetail.stats"
-    [pokemonName]="pokemonDetail.name">
-  </app-pokemon-stats-graph>
-</div>
 
-<div class="types-container" *ngIf="pokemonDetail?.types">
-  <app-pokemon-types [types]="pokemonDetail.types"></app-pokemon-types>
-</div>
-
-<div *ngIf="pokemonDetail?.abilities">
-  <app-pokemon-abilities [abilities]="pokemonDetail.abilities"></app-pokemon-abilities>
-</div>
-
-<div>
-  <app-pokemon-species 
-    *ngIf="pokemonDetail?.name"
-    [name]="pokemonDetail.name">
-  </app-pokemon-species>
-</div>
-
-<div *ngIf="pokemonDetail?.name">
-  <p></p>
-  <app-pokemon-evolution [name]="pokemonDetail.name"></app-pokemon-evolution>
+  <!-- Row 3: Stats + Evolution -->
+  <div class="row">
+    
+    <div class="column" *ngIf="pokemonDetail?.name">
+      <app-pokemon-evolution [name]="pokemonDetail.name"></app-pokemon-evolution>
+    </div>
+  </div>
 </div>
 
 <div>

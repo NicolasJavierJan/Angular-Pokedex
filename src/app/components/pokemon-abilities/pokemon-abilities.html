@@ -1,8 +1,0 @@
-<h3>Abilities</h3>
-<ul>
-  <li *ngFor="let a of abilities">
-    <strong>{{ a.ability.name | titlecase }}</strong>
-    <span *ngIf="a.is_hidden" class="hidden-ability">(Hidden)</span>
-    <p class="ability-description">{{ a.description || 'Loading description...' }}</p>
-  </li>
-</ul>

@@ -17,7 +17,8 @@ export class PokemonSpecies implements OnChanges{
 
    ngOnChanges(changes: SimpleChanges): void {
     if (changes['name'] && this.name) {
-      this.pokemonService.getPokemonSpecies(this.name).subscribe((data: any) => {
+      const speciesName = this.pokemonService.resolveSpeciesName(this.name);
+      this.pokemonService.getPokemonSpecies(speciesName).subscribe((data: any) => {
       this.speciesInfo = data;
 
       const englishTexts = data.flavor_text_entries.filter(

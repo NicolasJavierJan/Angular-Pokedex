@@ -27,47 +27,78 @@ export class PokemonService {
       'palafin-zero', 'tatsugiri-curly', 'dudunsparce-two-segment' 
   ];
 
-  async getPokemonList(limit: number): Promise<any> {
-    if (this.cachedPokemonList) {
-      return of({ results: this.cachedPokemonList });
-    }
+  private loadingList = false;
 
+  async getPokemonList(limit: number): Promise<any[]> {
+  if (this.cachedPokemonList) {
+    return this.cachedPokemonList;
+  }
+
+  if (this.loadingList) {
+    return new Promise(resolve =>
+      setTimeout(() => resolve(this.getPokemonList(limit)), 100)
+    );
+  }
+
+  this.loadingList = true;
+
+  try {
     const url = `${this.baseUrl}?limit=${limit}`;
-    const response = await firstValueFrom(this.http.get<any>(url));
+    const response = await firstValueFrom(this.http.get<{ results: any[] }>(url));
     const all = response.results;
-    
+
     const hyphenated = all.filter((p: any) => p.name.includes('-'));
 
     for (const p of hyphenated) {
       try {
-        const speciesName = this.nameHasHyphen.includes(p.name) // If nameHasHyphen then search with hyphen (otherwise it will fail)
-          ? p.name
-          : this.nameHasForm.includes(p.name) // else, name is a form? If yes, search only the Species name.
-          ? p.name.split('-')[0]
-          : p.name // Shouldn't reach here.
-        
+        const speciesName = this.resolveSpeciesName(p.name);
         const species = await firstValueFrom(
           this.http.get<any>(`${this.baseUrl}-species/${speciesName}`)
         );
         const englishName = species.names.find((n: any) => n.language.name === 'en');
         const displayName = englishName ? englishName.name : species.name;
 
-        const idx = all.findIndex((x : any) => x.name === p.name);
-        if (idx !== -1){
-          all[idx] = {...all[idx], displayName};
+        const idx = all.findIndex((x: any) => x.name === p.name);
+        if (idx !== -1) {
+          all[idx] = { ...all[idx], displayName };
         }
-      } catch (e){
-        console.warn('Failed to fetch a display name for ', p.name);
+      } catch (e) {
+        console.warn('Failed to fetch display name for', p.name);
       }
     }
 
     this.cachedPokemonList = all;
-    return { results: all };
+    return all;
+  } finally {
+    this.loadingList = false;
+  }
+}
+
+
+  async getFullPokemonDetail(name: string): Promise<any> {
+    const pokemon = await firstValueFrom(
+      this.http.get<any>(`https://pokeapi.co/api/v2/pokemon/${name}`)
+    );
+
+    const cached = this.cachedPokemonList?.find(p => p.name === name);
+    const displayNameFromCache = cached?.displayName;
+
+    const speciesName = this.resolveSpeciesName(name);
+    const species = await firstValueFrom(
+      this.http.get<any>(`https://pokeapi.co/api/v2/pokemon-species/${speciesName}`)
+    );
+
+    const englishNameFromSpecies = species.names.find(
+      (n: any) => n.language.name === 'en'
+    )?.name;
+
+    return {
+      ...pokemon,
+      species,
+      displayName: displayNameFromCache ?? englishNameFromSpecies ?? name
+    };
   }
 
-  getPokemonDetails(name: string): Observable<any> {
-    return this.http.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
-  }
 
   getPokemonSpecies(name: string) {
     return this.http.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`);
@@ -75,5 +106,21 @@ export class PokemonService {
 
   getEvolutionChainByUrl(url: string) {
     return this.http.get(url);
+  }
+
+  resolveSpeciesName(name: string): string {
+    if (this.nameHasHyphen.includes(name)) return name;
+    if (this.nameHasForm.includes(name)) return name.split('-')[0];
+    return name;
+  }
+
+  getDisplayName(name: string): string {
+    // Map hyphenated names to proper display names, e.g.
+    const map: Record<string, string> = {
+      'mr-mime': 'Mr. Mime',
+      'nidoran-f': 'Nidoran ♀',
+      // Add others here, or use cached names
+    };
+    return map[name] || name.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }
 }
